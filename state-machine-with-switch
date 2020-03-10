@@ -1,0 +1,63 @@
+
+const int buttonPin = 7;     // the number of the pushbutton pin
+const int ledPin =  13;      // the number of the LED pin
+
+int buttonState = 0;         // variable for reading the pushbutton status
+
+int STATE;
+bool last_switch_state; 
+
+void setup() {
+  // initialize the LED pin as an output:
+  pinMode(ledPin, OUTPUT);
+  // initialize the pushbutton pin as an input:
+  pinMode(buttonPin, INPUT);
+
+  STATE = 0;
+  last_switch_state = false;
+
+  Serial.begin(9600);
+}
+
+void loop() {
+
+ // ================ SWITCH SENSOR CODE ===================
+  buttonState = digitalRead(buttonPin);
+
+  if (buttonState == HIGH) {
+
+    delay(100);       // brute force debounce
+
+    if (buttonState == HIGH) {
+      digitalWrite(ledPin, HIGH);
+      if(last_switch_state == false){
+        STATE++;
+        last_switch_state = true;
+        Serial.println(STATE);
+      }
+    }
+    
+  } else {
+    digitalWrite(ledPin, LOW);
+    last_switch_state = false;
+  }
+
+
+  // ================ STATE MACHINE ===================
+  if(STATE == 0){
+    Serial.println("FIRST SEQUENCE");
+    // STATE++;
+  }
+  else if(STATE == 1){
+    Serial.println("SECOND SEQUENCE");
+    // STATE++;
+  }
+  else if(STATE == 2){
+    Serial.println("THIRD SEQUENCE");
+    // STATE++;
+  }
+  else{
+    STATE = 0;
+  }
+   
+}
